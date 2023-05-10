@@ -1,16 +1,17 @@
 #![no_std]
 #![no_main]
 
+use ae_rp2040 as bsp;
 use bsp::entry;
 
 // デバッガのクレート。デバッグピンと通信する準備は必要
 use defmt::*;
 use defmt_rtt as _;
-
-use embedded_hal::digital::v2::{InputPin, OutputPin};
+// panic機能
 use panic_probe as _;
 
-use ae_rp2040 as bsp;
+// ピンのトレイト
+use embedded_hal::digital::v2::{InputPin, OutputPin};
 
 use bsp::hal::{
     clocks::{init_clocks_and_plls, Clock},
@@ -18,6 +19,23 @@ use bsp::hal::{
     sio::Sio,
     watchdog::Watchdog,
 };
+
+// NOTE: 以下がサンプルプログラムからコピペ
+use bsp::hal;
+// 割り込み機能
+use bsp::hal::pac::interrupt;
+// USB Device support
+use usb_device::{class_prelude::*, prelude::*};
+// USB Human Interface Device (HID) Class support
+use usbd_hid::descriptor::generator_prelude::*;
+use usbd_hid::descriptor::MouseReport;
+use usbd_hid::hid_class::HIDClass;
+/// The USB Device Driver (shared with the interrupt).
+static mut USB_DEVICE: Option<UsbDevice<hal::usb::UsbBus>> = None;
+/// The USB Bus Driver (shared with the interrupt).
+static mut USB_BUS: Option<UsbBusAllocator<hal::usb::UsbBus>> = None;
+/// The USB Human Interface Device Driver (shared with the interrupt).
+static mut USB_HID: Option<HIDClass<hal::usb::UsbBus>> = None;
 
 #[entry]
 fn main() -> ! {
