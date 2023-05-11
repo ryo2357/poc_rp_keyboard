@@ -1,11 +1,6 @@
 #![no_std]
 #![no_main]
 
-// pub mod keycodes;
-// pub mod keymap;
-mod key_scanner;
-use key_scanner::KeyScanner;
-
 use ae_rp2040 as bsp;
 use bsp::entry;
 
@@ -20,7 +15,6 @@ use embedded_hal::digital::v2::{InputPin, OutputPin};
 
 use bsp::hal::{
     clocks::{init_clocks_and_plls, Clock},
-    gpio::DynPin,
     pac,
     sio::Sio,
     watchdog::Watchdog,
@@ -87,6 +81,15 @@ fn main() -> ! {
     .ok()
     .unwrap();
 
+    // twichy mouseなのでピンを使わない
+    // let sio = Sio::new(pac.SIO);
+    // let pins = bsp::Pins::new(
+    //     pac.IO_BANK0,
+    //     pac.PADS_BANK0,
+    //     sio.gpio_bank0,
+    //     &mut pac.RESETS,
+    // );
+
     // USBドライバーのセットアップ
     let usb_bus = UsbBusAllocator::new(hal::usb::UsbBus::new(
         pac.USBCTRL_REGS,
@@ -125,66 +128,26 @@ fn main() -> ! {
     };
     let mut delay = cortex_m::delay::Delay::new(core.SYST, clocks.system_clock.freq().to_Hz());
 
-    let sio = Sio::new(pac.SIO);
-    let pins = bsp::Pins::new(
-        pac.IO_BANK0,
-        pac.PADS_BANK0,
-        sio.gpio_bank0,
-        &mut pac.RESETS,
-    );
-    // LED pin12
-    // 右スイッチ　pin19,pin20
-    // 左スイッチ　pin10,pin11
-    let mut led_pin = pins.gpio12.into_push_pull_output();
-
-    // let row0 = pins.gpio20.into_push_pull_output();
-    // let row1 = pins.gpio11.into_push_pull_output();
-    // let rows: [&mut DynPin; 2] = [&mut row0.into(), &mut row1.into()];
-
-    // let col0 = pins.gpio19.into_pull_up_input();
-    // let col1 = pins.gpio10.into_pull_up_input();
-    // let mut cols: [&mut DynPin; 2] = [&mut col1.into(), &mut col0.into()];
-    // // 初期化
-    // rows[0].set_low().unwrap();
-    // rows[1].set_high().unwrap();
-
-    // キースキャナの作成
-    // let mut key_scanner = KeyScanner::new(rows, cols);
-    let mut key_scanner = KeyScanner::new(pins);
-
-    // メインループの準備
-    let mut last_keycodes = [0u8; 6];
-    let mut last_modifiers = 0;
-    // メインループ
     loop {
-        let result = key_scanner.scan();
-        // リブート機能　⇒　とりまいらない
-        // if result.number_of_keys_pressed > 5 {
-        //     // Reboot the device into BOOTSEL mode when >5 keys are pressed
-        //     clear_screen();
-        //     print!(0, "****");
-        //     print!(1, "BOOT");
-        //     print!(2, "SEL");
-        //     print!(3, "****");
-        //     hal::rom_data::reset_to_usb_boot(0, 0);
-        //     loop {
-        //         cortex_m::asm::wfe();
-        //     }
-        // }
+        // 分かりやすいように大げさに動かす
+        delay.delay_ms(1000);
 
-        let keycodes = result.keycodes;
-        let modifiers = result.modifiers;
+        let rep = KeyboardReport {
+            modifier: 0,
+            reserved: 0,
+            keycodes: [0x04 /* A */, 0, 0, 0, 0, 0],
+        };
 
-        if last_keycodes != keycodes || last_modifiers != modifiers {
-            let rep = KeyboardReport {
-                modifier: modifiers,
-                reserved: 0,
-                keycodes,
-            };
-            push_key_event(rep).ok().unwrap_or(0);
-            last_keycodes = keycodes;
-            last_modifiers = modifiers;
-        }
+        push_key_event(rep).ok().unwrap_or(0);
+
+        delay.delay_ms(1000);
+
+        let rep = KeyboardReport {
+            modifier: 0,
+            reserved: 0,
+            keycodes: [0x05 /* B */, 0, 0, 0, 0, 0],
+        };
+        push_key_event(rep).ok().unwrap_or(0);
     }
 }
 
