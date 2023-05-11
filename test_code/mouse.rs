@@ -28,34 +28,13 @@ use bsp::hal::pac::interrupt;
 use usb_device::{class_prelude::*, prelude::*};
 // USB Human Interface Device (HID) Class support
 use usbd_hid::descriptor::generator_prelude::*;
+use usbd_hid::descriptor::MouseReport;
 use usbd_hid::hid_class::HIDClass;
 
 // interruptで使うための書き方
 static mut USB_DEVICE: Option<UsbDevice<hal::usb::UsbBus>> = None;
 static mut USB_BUS: Option<UsbBusAllocator<hal::usb::UsbBus>> = None;
 static mut USB_HID: Option<HIDClass<hal::usb::UsbBus>> = None;
-
-// KeyboardReport ではうまいこと動かない
-// ledsのフィールドがいらない
-#[gen_hid_descriptor(
-    (collection = APPLICATION, usage_page = GENERIC_DESKTOP, usage = KEYBOARD) = {
-        (usage_page = KEYBOARD, usage_min = 0xE0, usage_max = 0xE7) = {
-            #[packed_bits 8] #[item_settings data,variable,absolute] modifier=input;
-        };
-        (usage_min = 0x00, usage_max = 0xFF) = {
-            #[item_settings constant,variable,absolute] reserved=input;
-        };
-        (usage_page = KEYBOARD, usage_min = 0x00, usage_max = 0xDD) = {
-            #[item_settings data,array,absolute] keycodes=input;
-        };
-}
-)]
-#[allow(dead_code)]
-pub struct KeyboardReport {
-    pub modifier: u8,
-    pub reserved: u8,
-    pub keycodes: [u8; 6],
-}
 
 #[entry]
 fn main() -> ! {
@@ -105,8 +84,9 @@ fn main() -> ! {
     // USBデバイス・コントローラの一部で、USBバスの帯域幅を割り当てる機能
     let bus_ref = unsafe { USB_BUS.as_ref().unwrap() };
 
-    // USB HIDクラスの作成　⇒　キーボードで作成
-    let usb_hid = HIDClass::new(bus_ref, KeyboardReport::desc(), 60);
+    // USB HIDクラスの作成
+    // 割り込み周期は60ms
+    let usb_hid = HIDClass::new(bus_ref, MouseReport::desc(), 60);
     unsafe {
         USB_HID = Some(usb_hid);
     }
@@ -132,27 +112,30 @@ fn main() -> ! {
         // 分かりやすいように大げさに動かす
         delay.delay_ms(1000);
 
-        let rep = KeyboardReport {
-            modifier: 0,
-            reserved: 0,
-            keycodes: [0x04 /* A */, 0, 0, 0, 0, 0],
+        let rep_up = MouseReport {
+            x: 0,
+            y: 50,
+            buttons: 0,
+            wheel: 0,
+            pan: 0,
         };
-
-        push_key_event(rep).ok().unwrap_or(0);
+        push_mouse_movement(rep_up).ok().unwrap_or(0);
 
         delay.delay_ms(1000);
 
-        let rep = KeyboardReport {
-            modifier: 0,
-            reserved: 0,
-            keycodes: [0x05 /* B */, 0, 0, 0, 0, 0],
+        let rep_down = MouseReport {
+            x: 0,
+            y: -50,
+            buttons: 0,
+            wheel: 0,
+            pan: 0,
         };
-        push_key_event(rep).ok().unwrap_or(0);
+        push_mouse_movement(rep_down).ok().unwrap_or(0);
     }
 }
 
 // critical_sectionはマルチスレッドで同期処理を行うためのクレート
-fn push_key_event(report: KeyboardReport) -> Result<usize, usb_device::UsbError> {
+fn push_mouse_movement(report: MouseReport) -> Result<usize, usb_device::UsbError> {
     critical_section::with(|_| unsafe {
         // Now interrupts are disabled, grab the global variable and, if
         // available, send it a HID report
