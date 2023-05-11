@@ -30,20 +30,21 @@ use usb_device::{class_prelude::*, prelude::*};
 use usbd_hid::descriptor::generator_prelude::*;
 use usbd_hid::descriptor::MouseReport;
 use usbd_hid::hid_class::HIDClass;
-/// The USB Device Driver (shared with the interrupt).
+
+// interruptで使うための書き方
 static mut USB_DEVICE: Option<UsbDevice<hal::usb::UsbBus>> = None;
-/// The USB Bus Driver (shared with the interrupt).
 static mut USB_BUS: Option<UsbBusAllocator<hal::usb::UsbBus>> = None;
-/// The USB Human Interface Device Driver (shared with the interrupt).
 static mut USB_HID: Option<HIDClass<hal::usb::UsbBus>> = None;
 
 #[entry]
 fn main() -> ! {
-    info!("Program start");
+    // プログラム初期化。基本的にテンプレートのまま
+    // [rp-hal-boards/pico_usb_twitchy_mouse.rs at main · rp-rs/rp-hal-boards · GitHub](https://github.com/rp-rs/rp-hal-boards/blob/main/boards/rp-pico/examples/pico_usb_twitchy_mouse.rs)
+    // clocksはサンプルコードだとエラーが出るので
+
     let mut pac = pac::Peripherals::take().unwrap();
     let core = pac::CorePeripherals::take().unwrap();
     let mut watchdog = Watchdog::new(pac.WATCHDOG);
-    let sio = Sio::new(pac.SIO);
 
     // External high-speed crystal on the pico board is 12Mhz
     let external_xtal_freq_hz = 12_000_000u32;
@@ -59,34 +60,95 @@ fn main() -> ! {
     .ok()
     .unwrap();
 
-    let pins = bsp::Pins::new(
-        pac.IO_BANK0,
-        pac.PADS_BANK0,
-        sio.gpio_bank0,
-        &mut pac.RESETS,
-    );
+    // twichy mouseなのでピンを使わない
+    // let sio = Sio::new(pac.SIO);
+    // let pins = bsp::Pins::new(
+    //     pac.IO_BANK0,
+    //     pac.PADS_BANK0,
+    //     sio.gpio_bank0,
+    //     &mut pac.RESETS,
+    // );
 
-    // GPIO23を通電させている間、GPIO14のLEDを発行させる
-    // GPIO23はBSPをいじっているため確認
-    let mut led_pin = pins.gpio14.into_push_pull_output();
-    let btn = pins.gpio23.into_pull_up_input();
-    loop {
-        if btn.is_low().unwrap() {
-            led_pin.set_high().unwrap();
-        } else {
-            led_pin.set_low().unwrap();
-        }
+    // USBドライバーのセットアップ
+    let usb_bus = UsbBusAllocator::new(hal::usb::UsbBus::new(
+        pac.USBCTRL_REGS,
+        pac.USBCTRL_DPRAM,
+        clocks.usb_clock,
+        true,
+        &mut pac.RESETS,
+    ));
+    unsafe {
+        USB_BUS = Some(usb_bus);
+    }
+    // USB　BUSアロケータの取得
+    // USBデバイス・コントローラの一部で、USBバスの帯域幅を割り当てる機能
+    let bus_ref = unsafe { USB_BUS.as_ref().unwrap() };
+
+    // USB HIDクラスの作成
+    let usb_hid = HIDClass::new(bus_ref, MouseReport::desc(), 60);
+    unsafe {
+        USB_HID = Some(usb_hid);
     }
 
-    // // GPIO14を使ったLチカ
-    // let mut delay = cortex_m::delay::Delay::new(core.SYST, clocks.system_clock.freq().to_Hz());
-    // let mut led_pin = pins.gpio14.into_push_pull_output();
-    // loop {
-    //     info!("on!");
-    //     led_pin.set_high().unwrap();
-    //     delay.delay_ms(500);
-    //     info!("off!");
-    //     led_pin.set_low().unwrap();
-    //     delay.delay_ms(500);
-    // }
+    // USBデバイスのVIDとPIDを設定
+    let usb_dev = UsbDeviceBuilder::new(bus_ref, UsbVidPid(0x16c0, 0x27da))
+        .manufacturer("Fake company")
+        .product("Twitchy Mousey")
+        .serial_number("TEST")
+        .device_class(0)
+        .build();
+    unsafe {
+        USB_DEVICE = Some(usb_dev);
+    }
+
+    // interrupt を可能にする
+    unsafe {
+        pac::NVIC::unmask(hal::pac::Interrupt::USBCTRL_IRQ);
+    };
+    let mut delay = cortex_m::delay::Delay::new(core.SYST, clocks.system_clock.freq().to_Hz());
+
+    loop {
+        // 分かりやすいように大げさに動かす
+        delay.delay_ms(1000);
+
+        let rep_up = MouseReport {
+            x: 0,
+            y: 50,
+            buttons: 0,
+            wheel: 0,
+            pan: 0,
+        };
+        push_mouse_movement(rep_up).ok().unwrap_or(0);
+
+        delay.delay_ms(1000);
+
+        let rep_down = MouseReport {
+            x: 0,
+            y: -50,
+            buttons: 0,
+            wheel: 0,
+            pan: 0,
+        };
+        push_mouse_movement(rep_down).ok().unwrap_or(0);
+    }
+}
+
+// critical_sectionはマルチスレッドで同期処理を行うためのクレート
+fn push_mouse_movement(report: MouseReport) -> Result<usize, usb_device::UsbError> {
+    critical_section::with(|_| unsafe {
+        // Now interrupts are disabled, grab the global variable and, if
+        // available, send it a HID report
+        USB_HID.as_mut().map(|hid| hid.push_input(&report))
+    })
+    .unwrap()
+}
+
+// 送信をinterruptで処理している
+#[allow(non_snake_case)]
+#[interrupt]
+unsafe fn USBCTRL_IRQ() {
+    // Handle USB request
+    let usb_dev = USB_DEVICE.as_mut().unwrap();
+    let usb_hid = USB_HID.as_mut().unwrap();
+    usb_dev.poll(&mut [usb_hid]);
 }

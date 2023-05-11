@@ -15,6 +15,7 @@ ae-rp2040 = { path = "./ae-rp2040" }
 # USBmマウスのテスト
 usbd-hid = "0.6.1"
 usb-device= "0.2.9"
+critical-section = "1.0.0"
 
 
 # cargo build/run
