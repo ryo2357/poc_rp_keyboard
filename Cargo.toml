@@ -16,7 +16,7 @@ ae-rp2040 = { path = "./ae-rp2040" }
 usbd-hid = "0.6.1"
 usb-device= "0.2.9"
 critical-section = "1.0.0"
-
+once_cell = {version = "1.9.0", default-features = false}
 
 # cargo build/run
 [profile.dev]

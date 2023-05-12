@@ -3,8 +3,8 @@
 
 // pub mod keycodes;
 // pub mod keymap;
-mod key_scanner;
-use key_scanner::KeyScanner;
+mod keybord;
+use keybord::Keyboard;
 
 use ae_rp2040 as bsp;
 use bsp::entry;
@@ -26,10 +26,16 @@ use bsp::hal::{
     watchdog::Watchdog,
 };
 
-// NOTE: 以下がサンプルプログラムからコピペ
+// NOTE: 以下がサンプルプログラムからコピペX
 use bsp::hal;
 // 割り込み機能
 use bsp::hal::pac::interrupt;
+// ディレイ機能
+use core::cell::RefCell;
+use cortex_m::delay::Delay;
+use cortex_m::interrupt::CriticalSection;
+use cortex_m::interrupt::Mutex;
+use once_cell::unsync::OnceCell;
 // USB Device support
 use usb_device::{class_prelude::*, prelude::*};
 // USB Human Interface Device (HID) Class support
@@ -40,6 +46,8 @@ use usbd_hid::hid_class::HIDClass;
 static mut USB_DEVICE: Option<UsbDevice<hal::usb::UsbBus>> = None;
 static mut USB_BUS: Option<UsbBusAllocator<hal::usb::UsbBus>> = None;
 static mut USB_HID: Option<HIDClass<hal::usb::UsbBus>> = None;
+
+static DELAY: Mutex<OnceCell<RefCell<Delay>>> = Mutex::new(OnceCell::new());
 
 // KeyboardReport ではうまいこと動かない
 // ledsのフィールドがいらない
@@ -124,6 +132,14 @@ fn main() -> ! {
         pac::NVIC::unmask(hal::pac::Interrupt::USBCTRL_IRQ);
     };
     let mut delay = cortex_m::delay::Delay::new(core.SYST, clocks.system_clock.freq().to_Hz());
+    unsafe {
+        let cs = CriticalSection::new();
+        let global_delay = DELAY.borrow(&cs);
+        global_delay
+            .set(RefCell::new(delay))
+            .map_err(|_| 0)
+            .unwrap();
+    }
 
     let sio = Sio::new(pac.SIO);
     let pins = bsp::Pins::new(
@@ -135,7 +151,7 @@ fn main() -> ! {
     // LED pin12
     // 右スイッチ　pin19,pin20
     // 左スイッチ　pin10,pin11
-    let mut led_pin = pins.gpio12.into_push_pull_output();
+    // let mut led_pin = pins.gpio12.into_push_pull_output();
 
     // let row0 = pins.gpio20.into_push_pull_output();
     // let row1 = pins.gpio11.into_push_pull_output();
@@ -150,14 +166,14 @@ fn main() -> ! {
 
     // キースキャナの作成
     // let mut key_scanner = KeyScanner::new(rows, cols);
-    let mut key_scanner = KeyScanner::new(pins);
+    let mut keyboard = Keyboard::new(pins.into());
 
     // メインループの準備
     let mut last_keycodes = [0u8; 6];
     let mut last_modifiers = 0;
     // メインループ
     loop {
-        let result = key_scanner.scan();
+        let result = keyboard.scan();
         // リブート機能　⇒　とりまいらない
         // if result.number_of_keys_pressed > 5 {
         //     // Reboot the device into BOOTSEL mode when >5 keys are pressed
@@ -206,4 +222,10 @@ unsafe fn USBCTRL_IRQ() {
     let usb_dev = USB_DEVICE.as_mut().unwrap();
     let usb_hid = USB_HID.as_mut().unwrap();
     usb_dev.poll(&mut [usb_hid]);
+}
+
+pub fn delay_ms(ms: u32) {
+    let cs = unsafe { CriticalSection::new() };
+    let delay = &mut *DELAY.borrow(&cs).get().unwrap().borrow_mut();
+    delay.delay_ms(ms);
 }
