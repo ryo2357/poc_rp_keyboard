@@ -10,17 +10,17 @@ use ae_rp2040 as bsp;
 use bsp::entry;
 
 // デバッガのクレート。デバッグピンと通信する準備は必要
-use defmt::*;
+// use defmt::*;
 use defmt_rtt as _;
 // panic機能
 use panic_probe as _;
 
 // ピンのトレイト
-use embedded_hal::digital::v2::{InputPin, OutputPin};
+// use embedded_hal::digital::v2::{InputPin, OutputPin};
 
 use bsp::hal::{
     clocks::{init_clocks_and_plls, Clock},
-    gpio::DynPin,
+    // gpio::DynPin,
     pac,
     sio::Sio,
     watchdog::Watchdog,
@@ -131,7 +131,7 @@ fn main() -> ! {
     unsafe {
         pac::NVIC::unmask(hal::pac::Interrupt::USBCTRL_IRQ);
     };
-    let mut delay = cortex_m::delay::Delay::new(core.SYST, clocks.system_clock.freq().to_Hz());
+    let delay = cortex_m::delay::Delay::new(core.SYST, clocks.system_clock.freq().to_Hz());
     unsafe {
         let cs = CriticalSection::new();
         let global_delay = DELAY.borrow(&cs);
@@ -166,7 +166,7 @@ fn main() -> ! {
 
     // キースキャナの作成
     // let mut key_scanner = KeyScanner::new(rows, cols);
-    let mut keyboard = Keyboard::new(pins.into());
+    let mut keyboard = Keyboard::new(pins.into(), delay_ms);
 
     // メインループの準備
     let mut last_keycodes = [0u8; 6];

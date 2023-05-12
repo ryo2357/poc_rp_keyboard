@@ -4,8 +4,6 @@ use crate::bsp::hal::gpio::DynPin;
 use crate::bsp::Pins;
 use embedded_hal::digital::v2::{InputPin, OutputPin};
 
-use crate::delay_ms;
-
 // LED pin12
 // 右スイッチ　pin19,pin20
 // 左スイッチ　pin10,pin11
@@ -52,7 +50,7 @@ const LAYER_1: KeyMapLayer = [
 
 const KEYMAP: KeyMap = [LAYER_0, LAYER_1];
 
-pub struct Keyboard {
+pub struct Keyboard<F> {
     keymap: KeyMap,
     rows: [DynPin; 2],
     cols: [DynPin; 2],
@@ -61,6 +59,7 @@ pub struct Keyboard {
     // macro_buf: [char; MACRO_BUF_SIZE],
     // macro_buf_read_index: usize,
     // macro_buf_write_index: usize,
+    delay_ms_fn: F,
 }
 pub struct KeyScanResult {
     pub keycodes: [u8; 6],
@@ -69,21 +68,24 @@ pub struct KeyScanResult {
     pub number_of_keys_pressed: u8,
 }
 
-impl Keyboard {
-    pub fn new(pins: Pins) -> Self {
+impl<F> Keyboard<F>
+where
+    F: Fn(u32),
+{
+    pub fn new(pins: Pins, delay_ms_fn: F) -> Self {
         let row0 = pins.gpio20.into_push_pull_output();
         let row1 = pins.gpio11.into_push_pull_output();
         let mut rows: [DynPin; 2] = [row0.into(), row1.into()];
 
         let col0 = pins.gpio19.into_pull_up_input();
         let col1 = pins.gpio10.into_pull_up_input();
-        let mut cols: [DynPin; 2] = [col0.into(), col1.into()];
+        let cols: [DynPin; 2] = [col0.into(), col1.into()];
         // 初期化
         rows[0].set_low().unwrap();
         rows[1].set_high().unwrap();
 
         let led_pin = pins.gpio12.into_push_pull_output();
-        let mut leds: [DynPin; 1] = [led_pin.into()];
+        let leds: [DynPin; 1] = [led_pin.into()];
 
         Self {
             keymap: KEYMAP,
@@ -91,6 +93,7 @@ impl Keyboard {
             cols: cols,
             leds: leds,
             current_layer: 0,
+            delay_ms_fn: delay_ms_fn,
         }
     }
 
@@ -104,7 +107,7 @@ impl Keyboard {
                     pin_row.set_high().unwrap();
                 }
             }
-            delay_ms(5); // Wait a bit to propagete the voltage
+            (self.delay_ms_fn)(5); // Wait a bit to propagete the voltage
             for (x, key) in row.iter_mut().enumerate() {
                 *key = self.cols[x].is_low().unwrap();
             }
