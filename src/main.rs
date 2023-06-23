@@ -5,6 +5,8 @@
 
 mod layout;
 use layout::{set_pins, KBDSIZE_COLS, KBDSIZE_LAYERS, KBDSIZE_LED, KBDSIZE_ROWS, KEYMAP};
+mod jis_keycodes;
+use jis_keycodes as keycodes;
 
 use ae_rp2040 as bsp;
 use bsp::entry;

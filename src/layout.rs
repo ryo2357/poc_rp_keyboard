@@ -3,9 +3,9 @@ use crate::bsp::hal::gpio::DynPin;
 use crate::bsp::Pins;
 use embedded_hal::digital::v2::{InputPin, OutputPin};
 
-use crate::{KeyMap, KeyMapLayer, KeyMapping};
+use crate::{KeyMap, KeyMapLayer};
 
-use KeyMapping::*;
+use crate::keycodes::*;
 
 // LED pin12
 // 右スイッチ　pin19,pin20
@@ -46,22 +46,13 @@ pub fn set_pins(
 // keycode 0x04 : key A
 // keycode 0x05 : key B
 
-pub const LCTRL: u8 = 0b00000001;
-pub const LSHIFT: u8 = 0b00000010;
-pub const LALT: u8 = 0b00000100;
-pub const LGUI: u8 = 0b00001000;
-pub const RCTRL: u8 = 0b00010000;
-pub const RSHIFT: u8 = 0b00100000;
-pub const RALT: u8 = 0b01000000;
-pub const RGUI: u8 = 0b10000000;
-
 // shiftの検証
-// #[allow(dead_code)]
-// #[rustfmt::skip]
-// const LAYER_0: KeyMapLayer = [
-//     [K(0x1f),  Empty,],// 2
-//     [Empty,  KM(LSHIFT),],//shift
-// ];
+#[allow(dead_code)]
+#[rustfmt::skip]
+const LAYER_0: KeyMapLayer = [
+    [   A,EMPTY, ],// 2
+    [   EMPTY, LSHIFT,],//shift
+];
 
 // shift同時押しキーの検証
 // #[allow(dead_code)]
@@ -82,8 +73,8 @@ pub const RGUI: u8 = 0b10000000;
 #[allow(dead_code)]
 #[rustfmt::skip]
 const LAYER_1: KeyMapLayer = [
-    [K(0x05),  Empty,],
-    [Empty,  L(1),],
+    [A,  EMPTY,],
+    [EMPTY,  KEY_2,],
 ];
 
 pub const KEYMAP: KeyMap = [LAYER_0, LAYER_1];
