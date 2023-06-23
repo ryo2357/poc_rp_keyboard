@@ -52,6 +52,7 @@ static DELAY: Mutex<OnceCell<RefCell<Delay>>> = Mutex::new(OnceCell::new());
 #[allow(dead_code)]
 pub enum KeyMapping {
     K(u8),  // Key(keycode)
+    SK(u8), // Left Shiftとの組み合わせ入力
     KM(u8), // Key(modifier)
     // M(u8),           // Mouse(button)
     L(usize), // Layer(layer)
@@ -151,6 +152,16 @@ where
                             keycodes[next_keycode_index] = keycode;
                             next_keycode_index += 1;
                         }
+                    }
+                    SK(keycode) => {
+                        // 同時押しは6個までしか入らない
+                        if next_keycode_index < keycodes.len() {
+                            keycodes[next_keycode_index] = keycode;
+                            next_keycode_index += 1;
+                        }
+                        // Left shiftの入力
+                        // pub const LSHIFT: u8 = 0b00000010;
+                        modifiers |= 0b00000010;
                     }
                     KM(modifier) => {
                         modifiers |= modifier;

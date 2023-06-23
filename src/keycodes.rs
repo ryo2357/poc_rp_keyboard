@@ -6,6 +6,8 @@
 // https://wiki.osdev.org/USB_Human_Interface_Devices
 // https://www.win.tue.nl/~aeb/linux/kbd/scancodes-14.html
 
+// [USBキーボードのキーコード](http://www2d.biglobe.ne.jp/~msyk/keyboard/layout/usbkeycode.html)
+
 pub const LCTRL: u8 = 0b00000001;
 pub const LSHIFT: u8 = 0b00000010;
 pub const LALT: u8 = 0b00000100;
@@ -50,7 +52,7 @@ pub const KEY_6: u8 = 0x23;
 pub const KEY_7: u8 = 0x24;
 pub const KEY_8: u8 = 0x25;
 pub const KEY_9: u8 = 0x26;
-pub const KEY_0: u8 = 0x27;
+pub const ke: u8 = 0x27;
 
 pub const ENTER: u8 = 40;
 pub const BS: u8 = 42;

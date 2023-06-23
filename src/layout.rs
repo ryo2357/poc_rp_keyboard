@@ -46,12 +46,39 @@ pub fn set_pins(
 // keycode 0x04 : key A
 // keycode 0x05 : key B
 
-#[allow(dead_code)]
-#[rustfmt::skip]
-const LAYER_0: KeyMapLayer = [
-    [K(0x06),  Empty,],
-    [Empty,  L(1),],
-];
+pub const LCTRL: u8 = 0b00000001;
+pub const LSHIFT: u8 = 0b00000010;
+pub const LALT: u8 = 0b00000100;
+pub const LGUI: u8 = 0b00001000;
+pub const RCTRL: u8 = 0b00010000;
+pub const RSHIFT: u8 = 0b00100000;
+pub const RALT: u8 = 0b01000000;
+pub const RGUI: u8 = 0b10000000;
+
+// shiftの検証
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_0: KeyMapLayer = [
+//     [K(0x1f),  Empty,],// 2
+//     [Empty,  KM(LSHIFT),],//shift
+// ];
+
+// shift同時押しキーの検証
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_0: KeyMapLayer = [
+//     [SK(0x1f),  Empty,],// 2
+//     [Empty,  SK(0x04),],//shift
+// ];
+
+// 入力切り替えの検証
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_0: KeyMapLayer = [
+//     [K(0x04),  Empty,],// A
+//     [Empty,  K(0x90),],//　Keyboard LANG1
+// ];
+
 #[allow(dead_code)]
 #[rustfmt::skip]
 const LAYER_1: KeyMapLayer = [
