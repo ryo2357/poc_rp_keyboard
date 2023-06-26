@@ -84,7 +84,7 @@ pub const AND: KeyMapping = KeyMapping::SK(35);
 
 // code 36: Keyboard 7 and &, JIS109: 7 '
 pub const KEY_7: KeyMapping = KeyMapping::K(36);
-pub const APST: KeyMapping = KeyMapping::SK(36);
+pub const S_QT: KeyMapping = KeyMapping::SK(36);
 
 // code 37: Keyboard 8 and *, JIS109: 8 (
 pub const KEY_8: KeyMapping = KeyMapping::K(37);
