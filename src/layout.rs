@@ -1,7 +1,6 @@
 // キーボード固有の機能をすべてここに入れたい
 use crate::bsp::hal::gpio::DynPin;
 use crate::bsp::Pins;
-use embedded_hal::digital::v2::{InputPin, OutputPin};
 
 use crate::{KeyMap, KeyMapLayer};
 
@@ -47,12 +46,12 @@ pub fn set_pins(
 // keycode 0x05 : key B
 
 // shiftの検証
-#[allow(dead_code)]
-#[rustfmt::skip]
-const LAYER_0: KeyMapLayer = [
-    [   A,EMPTY, ],// 2
-    [   EMPTY, LSHIFT,],//shift
-];
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_0: KeyMapLayer = [
+//     [   A,EMPTY, ],// 2
+//     [   EMPTY, LSHIFT,],//shift
+// ];
 
 // shift同時押しキーの検証
 // #[allow(dead_code)]
@@ -70,11 +69,29 @@ const LAYER_0: KeyMapLayer = [
 //     [Empty,  K(0x90),],//　Keyboard LANG1
 // ];
 
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_1: KeyMapLayer = [
+//     [A,  EMPTY,],
+//     [EMPTY,  KEY_2,],
+// ];
+
+//  キーコード作成での検証
+
+// 2.keycode50の確認 ⇒　普通に50を出力
+#[allow(dead_code)]
+#[rustfmt::skip]
+const LAYER_0: KeyMapLayer = [
+    [R_SB,  EMPTY,],// A
+    [EMPTY,  L1],//　Keyboard LANG1
+];
+
 #[allow(dead_code)]
 #[rustfmt::skip]
 const LAYER_1: KeyMapLayer = [
-    [A,  EMPTY,],
-    [EMPTY,  KEY_2,],
+    [R_CB,  EMPTY,],
+    [EMPTY,  L1,],
 ];
 
+// 2.key49が入力⇒ke
 pub const KEYMAP: KeyMap = [LAYER_0, LAYER_1];

@@ -67,7 +67,7 @@ pub type KeyMapLayer = [[KeyMapping; KBDSIZE_COLS]; KBDSIZE_ROWS];
 pub type ScanMatrix = [[bool; KBDSIZE_COLS]; KBDSIZE_ROWS];
 
 fn make_scan_matrix() -> ScanMatrix {
-    return [[false; KBDSIZE_COLS]; KBDSIZE_ROWS];
+    [[false; KBDSIZE_COLS]; KBDSIZE_ROWS]
 }
 
 pub struct Keyboard<F> {
@@ -96,11 +96,11 @@ where
         let (rows, cols, leds) = set_pins(pins);
         Self {
             keymap: KEYMAP,
-            rows: rows,
-            cols: cols,
-            leds: leds,
+            rows,
+            cols,
+            leds,
             current_layer: 0,
-            delay_ms_fn: delay_ms_fn,
+            delay_ms_fn,
         }
     }
 
@@ -122,6 +122,7 @@ where
         matrix
     }
 
+    #[allow(dead_code)]
     fn control_led(&mut self) {
         match self.current_layer {
             0 => self.leds[0].set_low().unwrap(),

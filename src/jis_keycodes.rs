@@ -4,6 +4,12 @@
 
 #![allow(dead_code)]
 use crate::KeyMapping;
+// LAYER KEY
+pub const L1: KeyMapping = KeyMapping::L(1);
+pub const L2: KeyMapping = KeyMapping::L(2);
+pub const L3: KeyMapping = KeyMapping::L(3);
+pub const L4: KeyMapping = KeyMapping::L(4);
+
 // Empty
 pub const EMPTY: KeyMapping = KeyMapping::Empty;
 
@@ -98,13 +104,19 @@ pub const EQUAL: KeyMapping = KeyMapping::SK(45);
 pub const HAT: KeyMapping = KeyMapping::K(46);
 pub const TILDE: KeyMapping = KeyMapping::SK(46);
 // code 47: Keyboard [ and {, JIS109: @ `
-// pub const : KeyMapping = KeyMapping::K(47);
+pub const AT_M: KeyMapping = KeyMapping::K(47);
+pub const BK_QT: KeyMapping = KeyMapping::SK(47);
 // code 48: Keyboard ] and }, JIS109: [ {
-// pub const : KeyMapping = KeyMapping::K(48);
+pub const L_SB: KeyMapping = KeyMapping::K(48);
+pub const L_CB: KeyMapping = KeyMapping::SK(48);
 // code 49: Keyboard \ and |, JIS109: -----
-// pub const : KeyMapping = KeyMapping::K(49);
+pub const K_49: KeyMapping = KeyMapping::K(49);
+pub const SK_49: KeyMapping = KeyMapping::SK(49);
+// JISキーボードには存在しない ⇒なぜか code 50 JIS109: ] }が入力
+
 // code 50: Keyboard Non-US # and ~, JIS109: ] }
-// pub const : KeyMapping = KeyMapping::K(50);
+pub const R_SB: KeyMapping = KeyMapping::K(50);
+pub const R_CB: KeyMapping = KeyMapping::SK(50);
 // code 51: Keyboard ; and :, JIS109: ; +
 // pub const : KeyMapping = KeyMapping::K(51);
 // code 52: Keyboard ' and ", JIS109: : *
