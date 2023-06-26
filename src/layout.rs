@@ -78,20 +78,108 @@ pub fn set_pins(
 
 //  キーコード作成での検証
 
+// 1.keycode49の確認 ⇒　] }を出力
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_0: KeyMapLayer = [
+//     [K_49,  EMPTY,],// A
+//     [EMPTY,  L1],//　Keyboard LANG1
+// ];
+
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_1: KeyMapLayer = [
+//     [SK_49,  EMPTY,],
+//     [EMPTY,  L1,],
+// ];
+
 // 2.keycode50の確認 ⇒　普通に50を出力
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_0: KeyMapLayer = [
+//     [R_SB,  EMPTY,],// A
+//     [EMPTY,  L1],//　Keyboard LANG1
+// ];
+
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_1: KeyMapLayer = [
+//     [R_CB,  EMPTY,],
+//     [EMPTY,  L1,],
+// ];
+
+// 3.keycode100の確認 ⇒　普通に50を出力
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_0: KeyMapLayer = [
+//     [K100,  EMPTY,],// A
+//     [EMPTY,  SK100],//　Keyboard LANG1
+// ];
+
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_1: KeyMapLayer = [
+//     [EMPTY,  EMPTY,],
+//     [EMPTY,  EMPTY,],
+// ];
+
+// 4.code 101: Keyboard Applicationの確認
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_0: KeyMapLayer = [
+//     [APP_K,  EMPTY,],// A
+//     [EMPTY,  APP_K],//　Keyboard LANG1
+// ];
+
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_1: KeyMapLayer = [
+//     [EMPTY,  EMPTY,],
+//     [EMPTY,  EMPTY,],
+// ];
+
+// 5.code 135の確認
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_0: KeyMapLayer = [
+//     [BC_SL,  EMPTY,],// A
+//     [EMPTY,  U_SCO],//　Keyboard LANG1
+// ];
+
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_1: KeyMapLayer = [
+//     [EMPTY,  EMPTY,],
+//     [EMPTY,  EMPTY,],
+// ];
+
+// 6.code 137の確認
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_0: KeyMapLayer = [
+//     [EN_M,  EMPTY,],// A
+//     [EMPTY,  PIPE],//　Keyboard LANG1
+// ];
+
+// #[allow(dead_code)]
+// #[rustfmt::skip]
+// const LAYER_1: KeyMapLayer = [
+//     [EMPTY,  EMPTY,],
+//     [EMPTY,  EMPTY,],
+// ];
+
+// 5.code 135の確認
 #[allow(dead_code)]
 #[rustfmt::skip]
 const LAYER_0: KeyMapLayer = [
-    [R_SB,  EMPTY,],// A
-    [EMPTY,  L1],//　Keyboard LANG1
+    [LGUI,  EMPTY,],// A
+    [EMPTY,  U_SCO],//　Keyboard LANG1
 ];
 
 #[allow(dead_code)]
 #[rustfmt::skip]
 const LAYER_1: KeyMapLayer = [
-    [R_CB,  EMPTY,],
-    [EMPTY,  L1,],
+    [EMPTY,  EMPTY,],
+    [EMPTY,  EMPTY,],
 ];
-
-// 2.key49が入力⇒ke
 pub const KEYMAP: KeyMap = [LAYER_0, LAYER_1];

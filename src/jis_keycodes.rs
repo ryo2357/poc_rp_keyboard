@@ -12,14 +12,15 @@ pub const L4: KeyMapping = KeyMapping::L(4);
 
 // Empty
 pub const EMPTY: KeyMapping = KeyMapping::Empty;
+pub const NO_SW: KeyMapping = KeyMapping::Empty;
 
 // modifirキー
 pub const LCTRL: KeyMapping = KeyMapping::KM(0b00000001);
-pub const LSHIFT: KeyMapping = KeyMapping::KM(0b00000010);
+pub const LSFT: KeyMapping = KeyMapping::KM(0b00000010);
 pub const LALT: KeyMapping = KeyMapping::KM(0b00000100);
 pub const LGUI: KeyMapping = KeyMapping::KM(0b00001000);
 pub const RCTRL: KeyMapping = KeyMapping::KM(0b00010000);
-pub const RSHIFT: KeyMapping = KeyMapping::KM(0b00100000);
+pub const RSFT: KeyMapping = KeyMapping::KM(0b00100000);
 pub const RALT: KeyMapping = KeyMapping::KM(0b01000000);
 pub const RGUI: KeyMapping = KeyMapping::KM(0b10000000);
 
@@ -64,189 +65,227 @@ pub const EXCL: KeyMapping = KeyMapping::SK(30);
 // code 31: Keyboard 2 and @, JIS109: 2 "
 pub const KEY_2: KeyMapping = KeyMapping::K(31);
 pub const D_QT: KeyMapping = KeyMapping::SK(31);
+
 // code 32: Keyboard 3 and #, JIS109: 3 #
 pub const KEY_3: KeyMapping = KeyMapping::K(32);
 pub const HASH: KeyMapping = KeyMapping::SK(32);
+
 // code 33: Keyboard 4 and $, JIS109: 4 $
 pub const KEY_4: KeyMapping = KeyMapping::K(33);
 pub const DOLL: KeyMapping = KeyMapping::SK(33);
+
 // code 34: Keyboard 5 and %, JIS109: 5 %
 pub const KEY_5: KeyMapping = KeyMapping::K(34);
 pub const PCNT: KeyMapping = KeyMapping::SK(34);
+
 // code 35: Keyboard 6 and ^, JIS109: 6 &
 pub const KEY_6: KeyMapping = KeyMapping::K(35);
 pub const AND: KeyMapping = KeyMapping::SK(35);
+
 // code 36: Keyboard 7 and &, JIS109: 7 '
 pub const KEY_7: KeyMapping = KeyMapping::K(36);
 pub const APST: KeyMapping = KeyMapping::SK(36);
+
 // code 37: Keyboard 8 and *, JIS109: 8 (
 pub const KEY_8: KeyMapping = KeyMapping::K(37);
 pub const L_RB: KeyMapping = KeyMapping::SK(37);
+
 // code 38: Keyboard 9 and (, JIS109: 9 )
 pub const KEY_9: KeyMapping = KeyMapping::K(38);
 pub const R_RB: KeyMapping = KeyMapping::SK(38);
+
 // code 39: Keyboard 0 and ), JIS109: 0
 pub const KEY_0: KeyMapping = KeyMapping::K(39);
+
 // code 40: Keyboard Return (ENTER), JIS109: Enter
 pub const ENTER: KeyMapping = KeyMapping::K(40);
+
 // code 41: Keyboard ESCAPE, JIS109: Esc
 pub const ESC: KeyMapping = KeyMapping::K(41);
+
 // code 42: Keyboard DELETE (Backspace), JIS109: Backspace
-pub const DEL: KeyMapping = KeyMapping::K(42);
+pub const BACKS: KeyMapping = KeyMapping::K(42);
+
 // code 43: Keyboard Tab, JIS109: Tab
 pub const TAB: KeyMapping = KeyMapping::K(43);
+
 // code 44: Keyboard Spacebar, JIS109: Spacebar
 pub const SPACE: KeyMapping = KeyMapping::K(44);
+
 // code 45: Keyboard - and (underscore), JIS109: - =
 pub const HYPN: KeyMapping = KeyMapping::K(45);
 pub const EQUAL: KeyMapping = KeyMapping::SK(45);
+
 // code 46: Keyboard = and +, JIS109: ^ ~
 pub const HAT: KeyMapping = KeyMapping::K(46);
 pub const TILDE: KeyMapping = KeyMapping::SK(46);
+
 // code 47: Keyboard [ and {, JIS109: @ `
 pub const AT_M: KeyMapping = KeyMapping::K(47);
 pub const BK_QT: KeyMapping = KeyMapping::SK(47);
+
 // code 48: Keyboard ] and }, JIS109: [ {
 pub const L_SB: KeyMapping = KeyMapping::K(48);
 pub const L_CB: KeyMapping = KeyMapping::SK(48);
+
 // code 49: Keyboard \ and |, JIS109: -----
-pub const K_49: KeyMapping = KeyMapping::K(49);
-pub const SK_49: KeyMapping = KeyMapping::SK(49);
+// pub const K_49: KeyMapping = KeyMapping::K(49);
+// pub const SK_49: KeyMapping = KeyMapping::SK(49);
 // JISキーボードには存在しない ⇒なぜか code 50 JIS109: ] }が入力
 
 // code 50: Keyboard Non-US # and ~, JIS109: ] }
 pub const R_SB: KeyMapping = KeyMapping::K(50);
 pub const R_CB: KeyMapping = KeyMapping::SK(50);
+
 // code 51: Keyboard ; and :, JIS109: ; +
-// pub const : KeyMapping = KeyMapping::K(51);
+pub const S_CLN: KeyMapping = KeyMapping::K(51);
+pub const PLUS: KeyMapping = KeyMapping::SK(51);
+
 // code 52: Keyboard ' and ", JIS109: : *
-// pub const : KeyMapping = KeyMapping::K(52);
+pub const COLON: KeyMapping = KeyMapping::K(52);
+pub const STAR: KeyMapping = KeyMapping::K(52);
+
 // code 53: Keyboard Grave Accent and Tilde
-// pub const : KeyMapping = KeyMapping::K(53);
+// 半角/全角キー
+pub const IME: KeyMapping = KeyMapping::K(53);
+
 // code 54: Keyboard , and <, JIS109: , <
-// pub const : KeyMapping = KeyMapping::K(54);
+pub const COMMA: KeyMapping = KeyMapping::K(54);
+pub const L_AB: KeyMapping = KeyMapping::SK(54);
+
 // code 55: Keyboard . and >, JIS109: . >
-// pub const : KeyMapping = KeyMapping::K(55);
+pub const DOT: KeyMapping = KeyMapping::K(55);
+pub const R_AB: KeyMapping = KeyMapping::SK(55);
+
 // code 56: Keyboard / and ?, JIS109: / ?
-// pub const : KeyMapping = KeyMapping::K(56);
+pub const SLASH: KeyMapping = KeyMapping::K(56);
+pub const QST_M: KeyMapping = KeyMapping::SK(56);
+
 // code 57: Keyboard Caps Lock, JIS109: 英数 Caps Lock
-// pub const : KeyMapping = KeyMapping::K(57);
-// code 58: Keyboard F1, JIS109: F1
-// pub const : KeyMapping = KeyMapping::K(58);
-// code 59: Keyboard F2, JIS109: F2
-// pub const : KeyMapping = KeyMapping::K(59);
-// code 60: Keyboard F3, JIS109: F3
-// pub const : KeyMapping = KeyMapping::K(60);
-// code 61: Keyboard F4, JIS109: F4
-// pub const : KeyMapping = KeyMapping::K(61);
-// code 62: Keyboard F5, JIS109: F5
-// pub const : KeyMapping = KeyMapping::K(62);
-// code 63: Keyboard F6, JIS109: F6
-// pub const : KeyMapping = KeyMapping::K(63);
-// code 64: Keyboard F7, JIS109: F7
-// pub const : KeyMapping = KeyMapping::K(64);
-// code 65: Keyboard F8, JIS109: F8
-// pub const : KeyMapping = KeyMapping::K(65);
-// code 66: Keyboard F9, JIS109: F9
-// pub const : KeyMapping = KeyMapping::K(66);
-// code 67: Keyboard F10, JIS109: F10
-// pub const : KeyMapping = KeyMapping::K(67);
-// code 68: Keyboard F11, JIS109: F11
-// pub const : KeyMapping = KeyMapping::K(68);
-// code 69: Keyboard F12, JIS109: F12
-// pub const : KeyMapping = KeyMapping::K(69);
+pub const EISUU: KeyMapping = KeyMapping::K(57);
+pub const CPS_L: KeyMapping = KeyMapping::SK(57);
+
+// code 58 - 69: Keyboard F1 - F12
+pub const F1: KeyMapping = KeyMapping::K(58);
+pub const F2: KeyMapping = KeyMapping::K(59);
+pub const F3: KeyMapping = KeyMapping::K(60);
+pub const F4: KeyMapping = KeyMapping::K(61);
+pub const F5: KeyMapping = KeyMapping::K(62);
+pub const F6: KeyMapping = KeyMapping::K(63);
+pub const F7: KeyMapping = KeyMapping::K(64);
+pub const F8: KeyMapping = KeyMapping::K(65);
+pub const F9: KeyMapping = KeyMapping::K(66);
+pub const F10: KeyMapping = KeyMapping::K(67);
+pub const F11: KeyMapping = KeyMapping::K(68);
+pub const F12: KeyMapping = KeyMapping::K(69);
+
 // code 70: Keyboard PrintScreen, JIS109: Print Screen
-// pub const : KeyMapping = KeyMapping::K(70);
+pub const PRT_S: KeyMapping = KeyMapping::K(70);
+
 // code 71: Keyboard Scroll Lock, JIS109: Scroll Lock
-// pub const : KeyMapping = KeyMapping::K(71);
+pub const SCR_L: KeyMapping = KeyMapping::K(71);
+
 // code 72: Keyboard Pause, JIS109: Pause
-// pub const : KeyMapping = KeyMapping::K(72);
+pub const PAUSE: KeyMapping = KeyMapping::K(72);
+
 // code 73: Keyboard Insert, JIS109: Insert
-// pub const : KeyMapping = KeyMapping::K(73);
+pub const INSRT: KeyMapping = KeyMapping::K(73);
+
 // code 74: Keyboard Home, JIS109: Home
-// pub const : KeyMapping = KeyMapping::K(74);
+pub const HOME: KeyMapping = KeyMapping::K(74);
+
 // code 75: Keyboard PageUp, JIS109: Page Up
-// pub const : KeyMapping = KeyMapping::K(75);
+pub const PG_U: KeyMapping = KeyMapping::K(75);
+
 // code 76: Keyboard Delete Forward, JIS109: Delete
-// pub const : KeyMapping = KeyMapping::K(76);
+pub const DEL: KeyMapping = KeyMapping::K(76);
+
 // code 77: Keyboard End, JIS109: End
-// pub const : KeyMapping = KeyMapping::K(77);
+pub const EMD: KeyMapping = KeyMapping::K(77);
+
 // code 78: Keyboard PageDown, JIS109: Page Down
-// pub const : KeyMapping = KeyMapping::K(78);
+pub const PG_D: KeyMapping = KeyMapping::K(78);
+
 // code 79: Keyboard RightArrow, JIS109: →
-// pub const : KeyMapping = KeyMapping::K(79);
+pub const RIGHT: KeyMapping = KeyMapping::K(79);
+
 // code 80: Keyboard LeftArrow, JIS109: ←
-// pub const : KeyMapping = KeyMapping::K(80);
+pub const LEFT: KeyMapping = KeyMapping::K(80);
+
 // code 81: Keyboard DownArrow, JIS109: ↓
-// pub const : KeyMapping = KeyMapping::K(81);
+pub const DOWN: KeyMapping = KeyMapping::K(81);
+
 // code 82: Keyboard UpArrow, JIS109: ↑
-// pub const : KeyMapping = KeyMapping::K(82);
+pub const UP: KeyMapping = KeyMapping::K(82);
+
 // code 83: Keypad Num Lock and Clear, JIS109: Num Lock
-// pub const : KeyMapping = KeyMapping::K(83);
+pub const NUM_L: KeyMapping = KeyMapping::K(83);
+
 // code 84: Keypad /, JIS109: Keypad /
-// pub const : KeyMapping = KeyMapping::K(84);
+pub const PD_SL: KeyMapping = KeyMapping::K(84);
+
 // code 85: Keypad *, JIS109: Keypad *
-// pub const : KeyMapping = KeyMapping::K(85);
+pub const PD_ST: KeyMapping = KeyMapping::K(85);
+
 // code 86: Keypad -, JIS109: Keypad -
-// pub const : KeyMapping = KeyMapping::K(86);
+pub const PD_MN: KeyMapping = KeyMapping::K(86);
+
 // code 87: Keypad +, JIS109: Keypad +
-// pub const : KeyMapping = KeyMapping::K(87);
+pub const PD_PS: KeyMapping = KeyMapping::K(87);
+
 // code 88: Keypad ENTER, JIS109: Keypad Enter
-// pub const : KeyMapping = KeyMapping::K(88);
-// code 89: Keypad 1 and End, JIS109: Keypad 1
-// pub const : KeyMapping = KeyMapping::K(89);
-// code 90: Keypad 2 and Down Arrow, JIS109: Keypad 2
-// pub const : KeyMapping = KeyMapping::K(90);
-// code 91: Keypad 3 and PageDn, JIS109: Keypad 3
-// pub const : KeyMapping = KeyMapping::K(91);
-// code 92: Keypad 4 and Left Arrow, JIS109: Keypad 4
-// pub const : KeyMapping = KeyMapping::K(92);
-// code 93: Keypad 5, JIS109: Keypad 5
-// pub const : KeyMapping = KeyMapping::K(93);
-// code 94: Keypad 6 and Right Arrow, JIS109: Keypad 6
-// pub const : KeyMapping = KeyMapping::K(94);
-// code 95: Keypad 7 and Home, JIS109: Keypad 7
-// pub const : KeyMapping = KeyMapping::K(95);
-// code 96: Keypad 8 and Up Arrow, JIS109: Keypad 8
-// pub const : KeyMapping = KeyMapping::K(96);
-// code 97: Keypad 9 and PageUp, JIS109: Keypad 9
-// pub const : KeyMapping = KeyMapping::K(97);
-// code 98: Keypad 0 and Insert, JIS109: Keypad 0
-// pub const : KeyMapping = KeyMapping::K(98);
+pub const PD_ET: KeyMapping = KeyMapping::K(88);
+
+// code 89～98:  Keypad 1～0
+pub const PD_1: KeyMapping = KeyMapping::K(89);
+pub const PD_2: KeyMapping = KeyMapping::K(90);
+pub const PD_3: KeyMapping = KeyMapping::K(91);
+pub const PD_4: KeyMapping = KeyMapping::K(92);
+pub const PD_5: KeyMapping = KeyMapping::K(93);
+pub const PD_6: KeyMapping = KeyMapping::K(94);
+pub const PD_7: KeyMapping = KeyMapping::K(95);
+pub const PD_8: KeyMapping = KeyMapping::K(96);
+pub const PD_9: KeyMapping = KeyMapping::K(97);
+pub const PD_0: KeyMapping = KeyMapping::K(98);
+
 // code 99: Keypad . and Delete, JIS109: Keypad .
-// pub const : KeyMapping = KeyMapping::K(99);
+pub const PD_DT: KeyMapping = KeyMapping::K(99);
+
 // code 100: Keyboard Non-US \ and |
-// pub const : KeyMapping = KeyMapping::K(100);
+// JISだと何も入力されない
+// pub const K100: KeyMapping = KeyMapping::K(100);
+// pub const SK100: KeyMapping = KeyMapping::SK(100);
+
 // code 101: Keyboard Application, JIS109: Application
-// pub const : KeyMapping = KeyMapping::K(101);
+// 右クリックのメニューが開く。メニューキー
+pub const APP_K: KeyMapping = KeyMapping::K(101);
+
 // code 102: Keyboard Power
-// pub const : KeyMapping = KeyMapping::K(102);
+pub const POWER: KeyMapping = KeyMapping::K(102);
+
 // code 103: Keypad =, JIS109: -----
-// pub const : KeyMapping = KeyMapping::K(103);
+// pub const K103: KeyMapping = KeyMapping::K(103);
+
 // code 104: Keyboard F13, JIS109: -----
-// pub const : KeyMapping = KeyMapping::K(104);
+// pub const K104: KeyMapping = KeyMapping::K(104);
 // code 105: Keyboard F14, JIS109: -----
-// pub const : KeyMapping = KeyMapping::K(105);
+// pub const K105: KeyMapping = KeyMapping::K(105);
 // code 106: Keyboard F15, JIS109: -----
-// pub const : KeyMapping = KeyMapping::K(106);
-// code 107: Keyboard F16
-// pub const : KeyMapping = KeyMapping::K(107);
-// code 108: Keyboard F17
-// pub const : KeyMapping = KeyMapping::K(108);
-// code 109: Keyboard F18
-// pub const : KeyMapping = KeyMapping::K(109);
-// code 110: Keyboard F19
-// pub const : KeyMapping = KeyMapping::K(110);
-// code 111: Keyboard F20
-// pub const : KeyMapping = KeyMapping::K(111);
-// code 112: Keyboard F21
-// pub const : KeyMapping = KeyMapping::K(112);
-// code 113: Keyboard F22
-// pub const : KeyMapping = KeyMapping::K(113);
-// code 114: Keyboard F23
-// pub const : KeyMapping = KeyMapping::K(114);
-// code 115: Keyboard F24
-// pub const : KeyMapping = KeyMapping::K(115);
+// pub const K106: KeyMapping = KeyMapping::K(106);
+
+// code 107 - 115: Keyboard F16 - F24
+pub const F16: KeyMapping = KeyMapping::K(107);
+pub const F17: KeyMapping = KeyMapping::K(108);
+pub const F18: KeyMapping = KeyMapping::K(109);
+pub const F19: KeyMapping = KeyMapping::K(110);
+pub const F20: KeyMapping = KeyMapping::K(111);
+pub const F21: KeyMapping = KeyMapping::K(112);
+pub const F22: KeyMapping = KeyMapping::K(113);
+pub const F23: KeyMapping = KeyMapping::K(114);
+pub const F24: KeyMapping = KeyMapping::K(115);
+
+// 以下ちょっと分からないキーボードの機能、必要なものを有効かしていく
+
 // code 116: Keyboard Execute
 // pub const : KeyMapping = KeyMapping::K(116);
 // code 117: Keyboard Help
@@ -285,12 +324,20 @@ pub const R_CB: KeyMapping = KeyMapping::SK(50);
 // pub const : KeyMapping = KeyMapping::K(133);
 // code 134: Keypad Equal Sign
 // pub const : KeyMapping = KeyMapping::K(134);
+
 // code 135: Keyboard International1, JIS109: ＼ _
-// pub const : KeyMapping = KeyMapping::K(135);
+// ＼=￥　表示環境次第
+pub const BC_SL: KeyMapping = KeyMapping::K(135);
+pub const U_SCO: KeyMapping = KeyMapping::SK(135);
+
 // code 136: Keyboard International2, JIS109: ひらがな カタカナ
 // pub const : KeyMapping = KeyMapping::K(136);
+
 // code 137: Keyboard International3, JIS109: ￥ ｜
-// pub const : KeyMapping = KeyMapping::K(137);
+// ＼=￥　表示環境次第
+pub const EN_M: KeyMapping = KeyMapping::K(137);
+pub const PIPE: KeyMapping = KeyMapping::SK(137);
+
 // code 138: Keyboard International4, JIS109: 変換
 // pub const : KeyMapping = KeyMapping::K(138);
 // code 139: Keyboard International5, JIS109: 無変換
@@ -303,10 +350,15 @@ pub const R_CB: KeyMapping = KeyMapping::SK(50);
 // pub const : KeyMapping = KeyMapping::K(142);
 // code 143: Keyboard International9
 // pub const : KeyMapping = KeyMapping::K(143);
+
 // code 144: Keyboard LANG1, JIS109: -----
-// pub const : KeyMapping = KeyMapping::K(144);
+// 日本語入力
+pub const LANG1: KeyMapping = KeyMapping::K(144);
+
 // code 145: Keyboard LANG2, JIS109: -----
-// pub const : KeyMapping = KeyMapping::K(145);
+// 英語入力
+pub const LANG2: KeyMapping = KeyMapping::K(145);
+
 // code 146: Keyboard LANG3
 // pub const : KeyMapping = KeyMapping::K(146);
 // code 147: Keyboard LANG4
@@ -469,8 +521,11 @@ pub const R_CB: KeyMapping = KeyMapping::SK(50);
 // pub const : KeyMapping = KeyMapping::K(225);
 // code 226: Keyboard LeftAlt, JIS109: -----
 // pub const : KeyMapping = KeyMapping::K(226);
+
 // code 227: Keyboard Left GUI, JIS109: Left Windows
-// pub const : KeyMapping = KeyMapping::K(227);
+// pub const WIN: KeyMapping = KeyMapping::K(227);
+// modifiyキーでいいような気がする
+
 // code 228: Keyboard RightControl, JIS109: Right Ctrl
 // pub const : KeyMapping = KeyMapping::K(228);
 // code 229: Keyboard RightShift, JIS109: Right Shift
